@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "devDependencies": {
+
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "*",
+    "node-flickr": "*"
+  }
+}
