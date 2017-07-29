@@ -29,7 +29,7 @@ exports.handler = function(event, context, lambdaCallback) {
     // normally we would do some sort of command parsing, but for this example we are just going to reply with the photo list whenever we receive any request
 
     // parse the chat ID so we can respond
-    var chatId = event.message.chat.id;
+    var chatId = JSON.parse(event.body).message.chat.id;
     
     // let them know we're working
     telegramBot.sendMessage(chatId, "Howdy! I'm fetching your images, just one second...");
@@ -63,7 +63,9 @@ exports.handler = function(event, context, lambdaCallback) {
 
                     // if we've sent all of the images, call the Lambda callback, which ends the Lambda process
                     if(sentImageCount == result.photos.length) {
-                        lambdaCallback(null,'');
+                          context.succeed({
+                              "statusCode": 200,
+                          });
                     }
                 });
             });
@@ -100,7 +102,9 @@ function getImageBuffer(photo, callback) {
         // handle errors
         res.on('error', function(err) {
             console.log("Error during HTTP request");
-            callback(err.message);
+            context.fail({
+                  "statusCode": 500,
+            });
         });
     });
 
